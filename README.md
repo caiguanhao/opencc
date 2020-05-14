@@ -2,6 +2,14 @@
 
 Simplified version of [gocc](https://github.com/liuzl/gocc).
 
+## Command Line
+
+```
+go get -v -u github.com/caiguanhao/opencc/opencc
+```
+
+## Import Package
+
 ```go
 package main
 
