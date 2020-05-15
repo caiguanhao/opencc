@@ -1,6 +1,9 @@
 # opencc
 
-Simplified version of [gocc](https://github.com/liuzl/gocc).
+Simplified version of [gocc](https://github.com/liuzl/gocc) and [OpenCC](https://github.com/BYVoid/OpenCC).
+
+OpenCC in one executable. You can also use OpenCC in browser.
+See [in-browser Chinese conversion tool](https://caiguanhao.github.io/opencc/wasm/).
 
 ## Command Line
 
