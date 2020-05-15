@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sort"
 
 	"github.com/caiguanhao/opencc"
 )
@@ -15,8 +16,17 @@ func main() {
 	dict := flag.String("dict", "s2t", "specify which dictionary to use")
 	flag.Parse()
 	if *showDicts {
-		for dict, text := range opencc.Dictionaries {
-			fmt.Printf("% -5s - %s\n", dict, text)
+		names := []string{}
+		nameMaxLen := 0
+		for name := range opencc.Dictionaries {
+			names = append(names, name)
+			if len(name) > nameMaxLen {
+				nameMaxLen = len(name)
+			}
+		}
+		sort.Strings(names)
+		for _, name := range names {
+			fmt.Printf(fmt.Sprintf("%% -%ds - %%s\n", nameMaxLen), name, opencc.Dictionaries[name])
 		}
 		return
 	}
