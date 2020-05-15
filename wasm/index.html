@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>OpenCC</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js"></script>
+<script src="wasm_exec.js"></script>
+</head>
+
+<body class="py-4 px-2">
+  <div class="container" id="app">
+    <template v-if="loading">
+      <p class="text-muted">Loading...</p>
+    </template>
+    <template v-else>
+      <div class="row mb-4">
+        <div class="col-sm-12 overflow-hidden">
+          <select class="form-control" v-model="dict">
+            <option v-bind:value="null">Select dictionary</option>
+            <option
+              v-for="dict in dicts"
+              v-bind:key="dict.name"
+              v-bind:value="dict.name"
+              v-text="`[${dict.name}] ${dict.text}`"></option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 mb-4">
+          <textarea class="form-control" v-model="input" rows="15" placeholder="Input"></textarea>
+        </div>
+        <div class="col-sm-6 mb-4">
+          <textarea class="form-control" v-model="output" rows="15" placeholder="Output" readonly></textarea>
+        </div>
+      </div>
+    </template>
+    <p>
+      <template v-if="!loading">
+        <a href v-on:click.prevent="example">Show me example</a>
+        /
+      </template>
+      <a href="https://github.com/caiguanhao/opencc">View on GitHub</a>
+    </p>
+  </div>
+
+<script>
+  (() => {
+    new Vue({
+      el: '#app',
+      data: {
+        loading: false,
+        input: null,
+        output: null,
+        dict: window.localStorage ? window.localStorage.getItem('dict') : null,
+        dicts: [],
+        exampleIndex: -1,
+        examples: [
+          {
+            dict: 's2twp',
+            input: `鼠标里面的硅二极管坏了，导致光标分辨率降低。
+我们在老挝的服务器的硬盘需要使用互联网算法软件解决异步的问题。
+为什么你在床里面睡着？`
+          },
+          {
+            dict: 't2jp',
+            input: `舊字體歷史假名遣 新字體現代假名遣
+橫濱 絲魚川 伊豫國
+驛辨當 辨別 辯護士 瓣膜
+藝術 缺航 飲料罐`
+          },
+          {
+            dict: 's2t',
+            input: `夸夸其谈 夸父逐日
+我干什么不干你事。
+太后的头发很干燥。
+燕燕于飞，差池其羽。之子于归，远送于野。
+请成相，世之殃，愚暗愚暗堕贤良。人主无贤，如瞽无相何伥伥！请布基，慎圣人，愚而自专事不治。主忌苟胜，群臣莫谏必逢灾。
+曾经有一份真诚的爱情放在我面前，我没有珍惜，等我失去的时候我才后悔莫及。人事间最痛苦的事莫过于此。如果上天能够给我一个再来一次得机会，我会对那个女孩子说三个字，我爱你。如果非要在这份爱上加个期限，我希望是，一万年。
+新的理论被发现了。
+鲶鱼和鲇鱼是一种生物。
+金胄不是金色的甲胄。`
+          }
+        ]
+      },
+      watch: {
+        input () {
+          this.convert()
+        },
+        dict (val) {
+          if (window.localStorage) window.localStorage.setItem('dict', val)
+          this.convert()
+        }
+      },
+      methods: {
+        convert () {
+          if (this.dict && this.input && window.OpenCC) {
+            this.output = window.OpenCC.Convert(this.dict, this.input)
+          } else {
+            this.output = null
+          }
+        },
+        example () {
+          this.exampleIndex++
+          if (this.exampleIndex >= this.examples.length) this.exampleIndex = 0
+          let example = this.examples[this.exampleIndex]
+          this.dict = example.dict
+          this.input = example.input
+        }
+      },
+      created () {
+        this.loading = true
+        document.addEventListener('OpenCCInited', () => {
+          this.loading = false
+          let dicts = Object.keys(window.OpenCC.Dictionaries)
+          this.dicts = dicts.map(name => {
+            return {
+              name,
+              text: window.OpenCC.Dictionaries[name]
+            }
+          })
+          this.dicts.sort((a, b) => a.name > b.name ? 1 : -1)
+          if (!this.dict && this.dicts.length > 0) this.dict = this.dicts[0].name
+        })
+        const go = new Go()
+        if (!WebAssembly.instantiateStreaming) { // polyfill
+          WebAssembly.instantiateStreaming = async (resp, importObject) => {
+            const source = await (await resp).arrayBuffer()
+            return await WebAssembly.instantiate(source, importObject)
+          }
+        }
+        WebAssembly.instantiateStreaming(fetch('opencc.wasm'), go.importObject).then(result => {
+          return go.run(result.instance)
+        })
+      }
+    })
+  })()
+</script>
+</body>
+
+</html>
