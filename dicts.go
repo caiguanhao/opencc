@@ -3,7 +3,22 @@
 package opencc
 
 import (
-	"github.com/caiguanhao/opencc/dicts"
+	"github.com/caiguanhao/opencc/dicts/HKVariants"
+	"github.com/caiguanhao/opencc/dicts/HKVariantsRev"
+	"github.com/caiguanhao/opencc/dicts/HKVariantsRevPhrases"
+	"github.com/caiguanhao/opencc/dicts/JPShinjitaiCharacters"
+	"github.com/caiguanhao/opencc/dicts/JPShinjitaiPhrases"
+	"github.com/caiguanhao/opencc/dicts/JPVariants"
+	"github.com/caiguanhao/opencc/dicts/JPVariantsRev"
+	"github.com/caiguanhao/opencc/dicts/STCharacters"
+	"github.com/caiguanhao/opencc/dicts/STPhrases"
+	"github.com/caiguanhao/opencc/dicts/TSCharacters"
+	"github.com/caiguanhao/opencc/dicts/TSPhrases"
+	"github.com/caiguanhao/opencc/dicts/TWPhrases"
+	"github.com/caiguanhao/opencc/dicts/TWPhrasesRev"
+	"github.com/caiguanhao/opencc/dicts/TWVariants"
+	"github.com/caiguanhao/opencc/dicts/TWVariantsRev"
+	"github.com/caiguanhao/opencc/dicts/TWVariantsRevPhrases"
 	"github.com/liuzl/da"
 )
 
@@ -28,119 +43,119 @@ func dictsForName(name string) [][]*da.Dict {
 	if name == "hk2s" {
 		return [][]*da.Dict{
 			{
-				dicts.HKVariantsRevPhrases,
-				dicts.HKVariantsRev,
+				HKVariantsRevPhrases.Dict,
+				HKVariantsRev.Dict,
 			},
 			{
-				dicts.TSPhrases,
-				dicts.TSCharacters,
+				TSPhrases.Dict,
+				TSCharacters.Dict,
 			},
 		}
 	}
 	if name == "jp2t" {
 		return [][]*da.Dict{
 			{
-				dicts.JPShinjitaiPhrases,
-				dicts.JPShinjitaiCharacters,
-				dicts.JPVariantsRev,
+				JPShinjitaiPhrases.Dict,
+				JPShinjitaiCharacters.Dict,
+				JPVariantsRev.Dict,
 			},
 		}
 	}
 	if name == "s2hk" {
 		return [][]*da.Dict{
 			{
-				dicts.STPhrases,
-				dicts.STCharacters,
+				STPhrases.Dict,
+				STCharacters.Dict,
 			},
 			{
-				dicts.HKVariants,
+				HKVariants.Dict,
 			},
 		}
 	}
 	if name == "s2t" {
 		return [][]*da.Dict{
 			{
-				dicts.STPhrases,
-				dicts.STCharacters,
+				STPhrases.Dict,
+				STCharacters.Dict,
 			},
 		}
 	}
 	if name == "s2tw" {
 		return [][]*da.Dict{
 			{
-				dicts.STPhrases,
-				dicts.STCharacters,
+				STPhrases.Dict,
+				STCharacters.Dict,
 			},
 			{
-				dicts.TWVariants,
+				TWVariants.Dict,
 			},
 		}
 	}
 	if name == "s2twp" {
 		return [][]*da.Dict{
 			{
-				dicts.STPhrases,
-				dicts.STCharacters,
+				STPhrases.Dict,
+				STCharacters.Dict,
 			},
 			{
-				dicts.TWPhrases,
+				TWPhrases.Dict,
 			},
 			{
-				dicts.TWVariants,
+				TWVariants.Dict,
 			},
 		}
 	}
 	if name == "t2hk" {
 		return [][]*da.Dict{
 			{
-				dicts.HKVariants,
+				HKVariants.Dict,
 			},
 		}
 	}
 	if name == "t2jp" {
 		return [][]*da.Dict{
 			{
-				dicts.JPVariants,
+				JPVariants.Dict,
 			},
 		}
 	}
 	if name == "t2s" {
 		return [][]*da.Dict{
 			{
-				dicts.TSPhrases,
-				dicts.TSCharacters,
+				TSPhrases.Dict,
+				TSCharacters.Dict,
 			},
 		}
 	}
 	if name == "t2tw" {
 		return [][]*da.Dict{
 			{
-				dicts.TWVariants,
+				TWVariants.Dict,
 			},
 		}
 	}
 	if name == "tw2s" {
 		return [][]*da.Dict{
 			{
-				dicts.TWVariantsRevPhrases,
-				dicts.TWVariantsRev,
+				TWVariantsRevPhrases.Dict,
+				TWVariantsRev.Dict,
 			},
 			{
-				dicts.TSPhrases,
-				dicts.TSCharacters,
+				TSPhrases.Dict,
+				TSCharacters.Dict,
 			},
 		}
 	}
 	if name == "tw2sp" {
 		return [][]*da.Dict{
 			{
-				dicts.TWPhrasesRev,
-				dicts.TWVariantsRevPhrases,
-				dicts.TWVariantsRev,
+				TWPhrasesRev.Dict,
+				TWVariantsRevPhrases.Dict,
+				TWVariantsRev.Dict,
 			},
 			{
-				dicts.TSPhrases,
-				dicts.TSCharacters,
+				TSPhrases.Dict,
+				TSCharacters.Dict,
 			},
 		}
 	}

@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"testing"
 )
@@ -52,6 +53,7 @@ func generateDicts() {
 
 	configs := map[string]Config{}
 	nameMaxLen := 0
+	dictsMap := map[string]bool{}
 	for _, file := range files {
 		f, err := os.Open(file)
 		if err != nil {
@@ -63,6 +65,14 @@ func generateDicts() {
 		if err = decoder.Decode(&config); err != nil {
 			panic(err)
 		}
+		for _, d := range config.ConversionChains {
+			if d.Dict.File != "" {
+				dictsMap[d.Dict.File] = true
+			}
+			for _, d := range d.Dict.Dicts {
+				dictsMap[d.File] = true
+			}
+		}
 		base := filepath.Base(file)
 		name := strings.TrimSuffix(base, filepath.Ext(base))
 		configs[name] = config
@@ -70,6 +80,11 @@ func generateDicts() {
 			nameMaxLen = len(name)
 		}
 	}
+	dicts := []string{}
+	for dict := range dictsMap {
+		dicts = append(dicts, dict)
+	}
+	sort.Strings(dicts)
 
 	tpl := template.Must(template.New("configs").Funcs(template.FuncMap{
 		"base": func(name string) string {
@@ -83,32 +98,34 @@ func generateDicts() {
 package opencc
 
 import (
-	"github.com/caiguanhao/opencc/dicts"
+	{{- range .Dicts}}
+	"github.com/caiguanhao/opencc/dicts/{{. | base}}"
+	{{- end}}
 	"github.com/liuzl/da"
 )
 
 var (
 	Dictionaries = map[string]string{
-	{{- range $name, $config := .}}
+	{{- range $name, $config := .Configs}}
 		"{{$name}}": {{$name | padSpaces}}"{{$config.Name}}",
 	{{- end}}
 	}
 )
 
 func dictsForName(name string) [][]*da.Dict {
-	{{- range $name, $config := .}}
+	{{- range $name, $config := .Configs}}
 	if name == "{{$name}}" {
 		return [][]*da.Dict{
 		{{- range $config.ConversionChains}}
 			{{- if .Dict.File}}
 			{
-				dicts.{{.Dict.File | base}},
+				{{.Dict.File | base}}.Dict,
 			},
 			{{- end}}
 			{{- if .Dict.Dicts}}
 			{
 				{{- range .Dict.Dicts}}
-				dicts.{{.File | base}},
+				{{.File | base}}.Dict,
 				{{- end}}
 			},
 			{{- end}}
@@ -124,7 +141,10 @@ func dictsForName(name string) [][]*da.Dict {
 		panic(err)
 	}
 	defer f.Close()
-	err = tpl.Execute(f, configs)
+	err = tpl.Execute(f, struct {
+		Configs map[string]Config
+		Dicts   []string
+	}{configs, dicts})
 	if err != nil {
 		panic(err)
 	}
