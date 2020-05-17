@@ -37,13 +37,20 @@
         </div>
       </div>
     </template>
-    <p>
-      <template v-if="!loading">
-        <a href v-on:click.prevent="example">Show me example</a>
-        /
-      </template>
-      <a href="https://github.com/caiguanhao/opencc">View on GitHub</a>
-    </p>
+    <div class="d-sm-flex justify-content-between">
+      <div>
+        <template v-if="!loading">
+          <a href v-on:click.prevent="example">Show me example</a>
+          /
+        </template>
+        <a href="https://github.com/caiguanhao/opencc">View on GitHub</a>
+      </div>
+      <div v-if="pwa !== null">
+        <label class="mb-0">
+          <input type="checkbox" v-model="pwa"><small class="ml-2">Enable Offline Mode (PWA)</small>
+        </label>
+      </div>
+    </div>
   </div>
 
 <script>
@@ -52,6 +59,7 @@
       el: '#app',
       data: {
         loading: false,
+        pwa: null,
         input: null,
         output: null,
         dict: window.localStorage ? window.localStorage.getItem('dict') : null,
@@ -92,6 +100,17 @@
         dict (val) {
           if (window.localStorage) window.localStorage.setItem('dict', val)
           this.convert()
+        },
+        pwa () {
+          if (!window.navigator.serviceWorker) return
+          if (this.pwa === true) {
+            window.navigator.serviceWorker.register('./service-worker.js')
+          } else if (this.pwa === false) {
+            window.navigator.serviceWorker.getRegistration().then(reg => {
+              if (reg) reg.unregister()
+            })
+            window.caches.delete('opencc')
+          }
         }
       },
       methods: {
@@ -134,6 +153,10 @@
         WebAssembly.instantiateStreaming(fetch('opencc.wasm'), go.importObject).then(result => {
           return go.run(result.instance)
         })
+
+        if (window.caches) {
+          window.caches.has('opencc').then(has => this.pwa = has)
+        }
       }
     })
   })()
