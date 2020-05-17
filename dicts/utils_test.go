@@ -19,7 +19,7 @@ func TestGenerateDicts(t *testing.T) {
 }
 
 func generateDicts() {
-	content, err := ioutil.ReadFile("../dicts.go")
+	content, err := ioutil.ReadFile("../convert.go")
 	if err != nil {
 		panic(err)
 	}
