@@ -13,6 +13,8 @@ go get -v -u github.com/caiguanhao/opencc/opencc
 
 ## Import Package
 
+### All
+
 ```go
 package main
 
@@ -26,5 +28,24 @@ func main() {
 	// fmt.Println(opencc.Dictionaries)
 	fmt.Println(opencc.Convert("s2twp", `鼠标里面的硅二极管坏了，导致光标分辨率降低。`))
 	// 滑鼠裡面的矽二極體壞了，導致游標解析度降低。
+}
+```
+
+### Specific
+
+```go
+package main
+
+import (
+	"fmt"
+
+	"github.com/caiguanhao/opencc/configs/tw2sp"
+)
+
+func main() {
+	fmt.Println(tw2sp.Description)
+	// Traditional Chinese (Taiwan standard) to Simplified Chinese (with phrases)
+	fmt.Println(tw2sp.Dicts.Convert(`滑鼠裡面的矽二極體壞了，導致游標解析度降低。`))
+	// 鼠标里面的硅二极管坏了，导致光标分辨率降低。
 }
 ```
