@@ -23,17 +23,24 @@ func generateDicts() {
 	if err != nil {
 		panic(err)
 	}
-	matches := regexp.MustCompile("/dicts/(\\w+)").FindAllStringSubmatch(string(content), -1)
+	configs := regexp.MustCompile("/configs/(\\w+)").FindAllStringSubmatch(string(content), -1)
 	names := []string{}
-	for _, match := range matches {
-		exists := false
-		for _, n := range names {
-			if n == match[1] {
-				exists = true
-			}
+	for _, config := range configs {
+		content, err := ioutil.ReadFile("../configs/" + config[1] + "/main.go")
+		if err != nil {
+			panic(err)
 		}
-		if !exists {
-			names = append(names, match[1])
+		dicts := regexp.MustCompile("/dicts/(\\w+)").FindAllStringSubmatch(string(content), -1)
+		for _, dict := range dicts {
+			exists := false
+			for _, n := range names {
+				if n == dict[1] {
+					exists = true
+				}
+			}
+			if !exists {
+				names = append(names, dict[1])
+			}
 		}
 	}
 	for i, name := range names {

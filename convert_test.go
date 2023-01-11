@@ -59,7 +59,7 @@ func TestAllCases(t *testing.T) {
 		}
 		actual := Convert(name, string(content))
 		if actual != string(expected) {
-			t.Fatal("bad case for", name)
+			t.Fatal("bad case for", name, "expect", actual, "to be", string(expected))
 		}
 	}
 }
