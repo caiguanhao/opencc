@@ -5,6 +5,9 @@ dicts: OpenCC-src
 	(cd dicts && go test -v)
 
 OpenCC-src:
-	mkdir OpenCC-src && curl -Ls https://github.com/BYVoid/OpenCC/archive/ver.1.1.0.tar.gz | tar --strip-components 1 -C OpenCC-src -xvzf - && (cd OpenCC-src && npm install)
+	mkdir OpenCC-src && curl -Ls https://github.com/BYVoid/OpenCC/archive/ver.1.1.6.tar.gz | tar --strip-components 1 -C OpenCC-src -xvzf - && (cd OpenCC-src && npm install)
 
-.PHONY: dicts
+wasm:
+	(cd wasm && GOOS=js GOARCH=wasm go build -v -o opencc.wasm)
+
+.PHONY: dicts wasm

@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	Description = "Traditional Chinese (Hong Kong standard) to Simplified Chinese"
+	Description = "Traditional Chinese (Hong Kong variant) to Simplified Chinese"
 )
 
 var (

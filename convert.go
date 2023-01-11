@@ -5,6 +5,7 @@ package opencc
 import (
 	"github.com/caiguanhao/opencc/configs"
 	"github.com/caiguanhao/opencc/configs/hk2s"
+	"github.com/caiguanhao/opencc/configs/hk2t"
 	"github.com/caiguanhao/opencc/configs/jp2t"
 	"github.com/caiguanhao/opencc/configs/s2hk"
 	"github.com/caiguanhao/opencc/configs/s2t"
@@ -16,11 +17,13 @@ import (
 	"github.com/caiguanhao/opencc/configs/t2tw"
 	"github.com/caiguanhao/opencc/configs/tw2s"
 	"github.com/caiguanhao/opencc/configs/tw2sp"
+	"github.com/caiguanhao/opencc/configs/tw2t"
 )
 
 var (
 	Dictionaries = map[string]string{
 		"hk2s":  hk2s.Description,
+		"hk2t":  hk2t.Description,
 		"jp2t":  jp2t.Description,
 		"s2hk":  s2hk.Description,
 		"s2t":   s2t.Description,
@@ -32,6 +35,7 @@ var (
 		"t2tw":  t2tw.Description,
 		"tw2s":  tw2s.Description,
 		"tw2sp": tw2sp.Description,
+		"tw2t":  tw2t.Description,
 	}
 )
 
@@ -43,6 +47,9 @@ func Convert(dictionary, in string) string {
 func dictsForName(name string) configs.Dicts {
 	if name == "hk2s" {
 		return hk2s.Dicts
+	}
+	if name == "hk2t" {
+		return hk2t.Dicts
 	}
 	if name == "jp2t" {
 		return jp2t.Dicts
@@ -76,6 +83,9 @@ func dictsForName(name string) configs.Dicts {
 	}
 	if name == "tw2sp" {
 		return tw2sp.Dicts
+	}
+	if name == "tw2t" {
+		return tw2t.Dicts
 	}
 	return nil
 }
