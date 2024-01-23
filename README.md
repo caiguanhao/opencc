@@ -11,7 +11,7 @@ You can also generate them using `go test`.
 ## Command Line
 
 ```
-go get -v -u github.com/caiguanhao/opencc/opencc
+go install github.com/caiguanhao/opencc/opencc@latest
 ```
 
 ## Import Package
