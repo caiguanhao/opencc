@@ -2,6 +2,7 @@ package dicts
 
 import (
 	"bytes"
+	"compress/flate"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -72,8 +73,12 @@ func generateDict(t *testing.T, file string) {
 	if err := dict.Trie.Save(&b, "gob"); err != nil {
 		panic(err)
 	}
+	compressed, err := compress(b.Bytes())
+	if err != nil {
+		panic(err)
+	}
 	var sb strings.Builder
-	for i, b := range b.Bytes() {
+	for i, b := range compressed {
 		if i%10 == 0 {
 			sb.WriteString("\n\t\t")
 		} else {
@@ -125,6 +130,21 @@ var Dict = &da.Dict{
 	if err != nil {
 		panic(err)
 	}
+}
+
+func compress(in []byte) ([]byte, error) {
+	var b bytes.Buffer
+	w, err := flate.NewWriter(&b, flate.BestSpeed)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := w.Write(in); err != nil {
+		return nil, err
+	}
+	if err := w.Close(); err != nil {
+		return nil, err
+	}
+	return b.Bytes(), nil
 }
 
 func fileExists(filename string) bool {
