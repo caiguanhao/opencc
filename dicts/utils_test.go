@@ -2,6 +2,7 @@ package dicts
 
 import (
 	"bytes"
+	"compress/flate"
 	"fmt"
 	"html/template"
 	"io/ioutil"
@@ -115,14 +116,34 @@ var Dict = &da.Dict{
 	}
 	defer f.Close()
 
+	compressed, err := compress(b.Bytes())
+	if err != nil {
+		panic(err)
+	}
+
 	err = tpl.Execute(f, struct {
 		*da.Dict
 		Name      string
 		TrieBytes []byte
-	}{dict, name, b.Bytes()})
+	}{dict, name, compressed})
 	if err != nil {
 		panic(err)
 	}
+}
+
+func compress(in []byte) ([]byte, error) {
+	var b bytes.Buffer
+	w, err := flate.NewWriter(&b, flate.BestSpeed)
+	if err != nil {
+		return nil, err
+	}
+	if _, err := w.Write(in); err != nil {
+		return nil, err
+	}
+	if err := w.Close(); err != nil {
+		return nil, err
+	}
+	return b.Bytes(), nil
 }
 
 func fileExists(filename string) bool {
