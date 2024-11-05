@@ -40,6 +40,10 @@ type (
 	}
 )
 
+func TestGenerateDicts(t *testing.T) {
+	generateDicts()
+}
+
 func TestAllCases(t *testing.T) {
 	files, err := filepath.Glob("OpenCC-src/test/testcases/*.in")
 	if err != nil {
@@ -62,10 +66,6 @@ func TestAllCases(t *testing.T) {
 			t.Fatal("bad case for", name, "expect", actual, "to be", string(expected))
 		}
 	}
-}
-
-func TestGenerateDicts(t *testing.T) {
-	generateDicts()
 }
 
 func generateDicts() {
