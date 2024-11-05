@@ -5,7 +5,7 @@ Simplified version of [gocc](https://github.com/liuzl/gocc) and [OpenCC](https:/
 OpenCC in one executable. You can also use OpenCC in browser.
 See [in-browser Chinese conversion tool](https://caiguanhao.github.io/opencc/wasm/).
 
-The config and dictionary Go files are generated from the source of OpenCC version 1.1.0.
+The config and dictionary Go files are generated from the source of OpenCC version 1.1.8.
 You can also generate them using `go test`.
 
 ## Command Line
