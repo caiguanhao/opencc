@@ -2,7 +2,6 @@ package opencc
 
 import (
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"io/ioutil"
 	"os"
@@ -56,7 +55,7 @@ func TestAllCases(t *testing.T) {
 		}
 		base := filepath.Base(file)
 		name := strings.TrimSuffix(base, filepath.Ext(base))
-		fmt.Println("testing", name)
+		t.Log("testing", name)
 		expected, err := ioutil.ReadFile("OpenCC-src/test/testcases/" + name + ".ans")
 		if err != nil {
 			panic(err)
