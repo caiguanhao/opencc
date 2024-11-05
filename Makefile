@@ -8,7 +8,7 @@ dicts: OpenCC-src
 
 OpenCC-src:
 	mkdir OpenCC-src && \
-		curl -Ls https://github.com/BYVoid/OpenCC/archive/ver.1.1.8.tar.gz | \
+		curl -Ls https://github.com/BYVoid/OpenCC/archive/ver.1.1.9.tar.gz | \
 		tar --strip-components 1 -C OpenCC-src -xvzf - && (cd OpenCC-src && npm install)
 
 wasm/opencc.wasm:
